@@ -19,15 +19,16 @@ class ChordRecognizer(tk.Frame):
             random_wrong_choice = random.randint(1,13)
             if random_wrong_choice != random_choice:
                 if chord_possibilities[random_wrong_choice] not in random_wrong_list:
-                    print(random_wrong_choice)
                     random_wrong_list.append(chord_possibilities[random_wrong_choice])
         random_positiion = random.randint(0, 5)
         random_wrong_list.insert(random_positiion, chord_choice)
-        print(random_wrong_list)
-        Button = tk.Button(self, text='Play Sound')
+        
+        Button = tk.Button(self, text='Play Sound', command = lambda: self.playSound())
+        Button.pack()
         for chord in random_wrong_list:
             Button = tk.Button(self, text=chord)
             Button.pack()
+
         return chord_choice, random_wrong_list
 
 root = tk.Tk()
