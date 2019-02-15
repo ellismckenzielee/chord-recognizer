@@ -7,16 +7,19 @@ import random
 class ChordRecognizer(tk.Frame):
     def __init__(self, master):
         tk.Frame.__init__(self, master)
-        self.gamecount = 0
+        self.gamecount = 1
         self.go = tk.Button(self, text='Start', command = lambda: self.ChordSelector())
         self.go.pack()
         self.no_of_games = 10
+        
     def ChordSelector(self):
+        self.go.pack_forget()
         chord_possibilities = {1: 'a', 2: 'a#', 3: 'b', 4: 'c', 5: 'c#', 6: 'd', 7: 'd#', 8: 'e', 9: 'e', 10: 'f', 11: 'f#', 12: 'g', 13: 'g#'} 
         random_choice = random.randint(1, 13)
         chord_choice = chord_possibilities[random_choice]
         random_wrong_list = [] 
         print(chord_choice)
+        
         while len(random_wrong_list) <= 5:
             random_wrong_choice = random.randint(1,13)
             if random_wrong_choice != random_choice:
@@ -38,6 +41,7 @@ class ChordRecognizer(tk.Frame):
         return chord_choice, random_wrong_list
 
     def SelectionChecker(self, value, chord_choice):
+        print(self.gamecount)
         '''Checks the user input and continues with the appropriate action'''
         print(value)
         end_of_game = self.endGameChecker()
@@ -51,7 +55,6 @@ class ChordRecognizer(tk.Frame):
         if end_of_game == True:
             self.endGame()
         else: 
-            self.addGame()
             self.ChordSelector()
   
     def addGame(self):
@@ -62,12 +65,18 @@ class ChordRecognizer(tk.Frame):
             return True
         else:
             return False
+
     def endGame(self):
         for widget in self.winfo_children():
             widget.destroy()
         Label = tk.Label(self, text='Thanks for playing')
         Label.pack()
-        print(ScoreCounter.score)
+        Score = tk.Label(self, text = 'You scored {} out of {}! '.format(ScoreCounter.score, self.no_of_games))
+        Score.pack()
+        self.go = tk.Button(self, text='Play Again?', command = lambda: self.ChordSelector())
+        self.go.pack()
+        ScoreCounter.resetScore()
+        self.gamecount = 1
 
 class ScoreCounter():
     def __init__(self):
@@ -76,6 +85,9 @@ class ScoreCounter():
     def addScore(self):
         self.score = self.score + 1
         print(self.score)
+
+    def resetScore(self):
+        self.score = 0
 
         
 root = tk.Tk()
